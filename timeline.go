@@ -41,6 +41,17 @@ func (t *Timeline) WriteHTML(p string) error {
 	if err != nil {
 		return err
 	}
+
+	fname := fmt.Sprintf("%s/tachymeter-%d.html", path, time.Now().Unix())
+
+	return t.WriteHTML(fname)
+}
+
+func (t *Timeline) WriteHTMLfile(p string) error {
+	path, err := filepath.Abs(p)
+	if err != nil {
+		return err
+	}
 	var b bytes.Buffer
 
 	b.WriteString(head)
@@ -68,9 +79,7 @@ func (t *Timeline) WriteHTML(p string) error {
 	b.WriteString(tail)
 
 	// Write file.
-	d := []byte(b.String())
-	fname := fmt.Sprintf("%s/tachymeter-%d.html", path, time.Now().Unix())
-	err = ioutil.WriteFile(fname, d, 0644)
+	err = ioutil.WriteFile(path, b.Bytes(), 0644)
 	if err != nil {
 		return err
 	}

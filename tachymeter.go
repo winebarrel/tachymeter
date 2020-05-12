@@ -123,6 +123,12 @@ func (m *Metrics) WriteHTML(p string) error {
 	return w.WriteHTML(p)
 }
 
+func (m *Metrics) WriteHTMLFile(p string) error {
+	w := Timeline{}
+	w.AddEvent(m)
+	return w.WriteHTMLfile(p)
+}
+
 // String satisfies the String interface.
 func (m *Metrics) String() string {
 	return fmt.Sprintf(`%d samples of %d events
