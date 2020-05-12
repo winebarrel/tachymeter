@@ -111,6 +111,14 @@ func (ts timeSlice) hgramInterval(b int, interval time.Duration) (*Histogram, ti
 
 	*hgram = append(*hgram, bin)
 
+	for i := pos; i < b-1; i++ {
+		low = high + time.Nanosecond
+		high += interval
+		bstring = fmt.Sprintf("%s - %s", low/res*res, high/res*res)
+		bin = map[string]uint64{bstring: 0}
+		*hgram = append(*hgram, bin)
+	}
+
 	return hgram, interval
 }
 
