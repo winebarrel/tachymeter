@@ -69,8 +69,8 @@ func (ts timeSlice) hgram(b int) (*Histogram, time.Duration) {
 
 func (ts timeSlice) hgramInterval(b int, interval time.Duration) (*Histogram, time.Duration) {
 	res := time.Duration(1000)
-	high := ts.min() + interval
-	low := ts.min()
+	high := time.Duration(0) + interval
+	low := time.Duration(0)
 	max := ts.max()
 	hgram := &Histogram{}
 	pos := 1 // Bin position.
