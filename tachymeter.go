@@ -17,20 +17,22 @@ import (
 // parameters. Size defines the sample capacity.
 // Tachymeter is thread safe.
 type Config struct {
-	Size  int
-	Safe  bool // Deprecated. Flag held on to as to not break existing users.
-	HBins int  // Histogram bins.
+	Size      int
+	Safe      bool // Deprecated. Flag held on to as to not break existing users.
+	HBins     int  // Histogram bins.
+	HInterval time.Duration
 }
 
 // Tachymeter holds event durations
 // and counts.
 type Tachymeter struct {
 	sync.Mutex
-	Size     uint64
-	Times    timeSlice
-	Count    uint64
-	WallTime time.Duration
-	HBins    int
+	Size      uint64
+	Times     timeSlice
+	Count     uint64
+	WallTime  time.Duration
+	HBins     int
+	HInterval time.Duration
 }
 
 // timeslice holds time.Duration values.
@@ -85,9 +87,10 @@ func New(c *Config) *Tachymeter {
 	}
 
 	return &Tachymeter{
-		Size:  uint64(c.Size),
-		Times: make([]time.Duration, c.Size),
-		HBins: hSize,
+		Size:      uint64(c.Size),
+		Times:     make([]time.Duration, c.Size),
+		HBins:     hSize,
+		HInterval: c.HInterval,
 	}
 }
 

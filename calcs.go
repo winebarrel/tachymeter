@@ -50,7 +50,11 @@ func (m *Tachymeter) Calc() *Metrics {
 	metrics.Time.Range = times.srange()
 	metrics.Time.StdDev = times.stdDev()
 
-	metrics.Histogram, metrics.HistogramBinSize = times.hgram(m.HBins)
+	if m.HInterval > 0 {
+		metrics.Histogram, metrics.HistogramBinSize = times.hgramInterval(m.HBins, m.HInterval)
+	} else {
+		metrics.Histogram, metrics.HistogramBinSize = times.hgram(m.HBins)
+	}
 
 	return metrics
 }
@@ -58,9 +62,13 @@ func (m *Tachymeter) Calc() *Metrics {
 // hgram returns a histogram of event durations in
 // b bins, along with the bin size.
 func (ts timeSlice) hgram(b int) (*Histogram, time.Duration) {
-	res := time.Duration(1000)
 	// Interval is the time range / n bins.
 	interval := time.Duration(int64(ts.srange()) / int64(b))
+	return ts.hgramInterval(b, interval)
+}
+
+func (ts timeSlice) hgramInterval(b int, interval time.Duration) (*Histogram, time.Duration) {
+	res := time.Duration(1000)
 	high := ts.min() + interval
 	low := ts.min()
 	max := ts.max()
