@@ -1,4 +1,4 @@
-module tachymeter
+module github.com/winebarrel/tachymeter
 
 go 1.13
 
