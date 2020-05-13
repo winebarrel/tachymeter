@@ -126,10 +126,10 @@ func (m *Metrics) WriteHTML(p string) error {
 	return w.WriteHTML(p)
 }
 
-func (m *Metrics) WriteHTMLFile(p string) error {
+func (m *Metrics) WriteHTMLFile(p string, title string) error {
 	w := Timeline{}
 	w.AddEvent(m)
-	return w.WriteHTMLfile(p)
+	return w.WriteHTMLfile(p, title)
 }
 
 // String satisfies the String interface.
