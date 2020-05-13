@@ -54,7 +54,8 @@ func (t *Timeline) WriteHTMLfile(p string, title string) error {
 	}
 	var b bytes.Buffer
 
-	b.WriteString(head)
+	h := strings.Replace(head, "XTITLE", title, 1)
+	b.WriteString(h)
 
 	// Append graph + info entry for each timeline
 	// event.
@@ -72,7 +73,7 @@ func (t *Timeline) WriteHTMLfile(p string, title string) error {
 
 	// Write graphs.
 	for id, m := range t.timeline {
-		s := genGraphHTML(m, id, title)
+		s := genGraphHTML(m, id)
 		b.WriteString(s)
 	}
 
@@ -89,7 +90,7 @@ func (t *Timeline) WriteHTMLfile(p string, title string) error {
 
 // genGraphHTML takes a *timelineEvent and id (used for each graph
 // html element ID) and creates a chart.js graph output.
-func genGraphHTML(te *timelineEvent, id int, title string) string {
+func genGraphHTML(te *timelineEvent, id int) string {
 	keys := []string{}
 	values := []uint64{}
 
@@ -103,8 +104,7 @@ func genGraphHTML(te *timelineEvent, id int, title string) string {
 	keysj, _ := json.Marshal(keys)
 	valuesj, _ := json.Marshal(values)
 
-	out := strings.Replace(graph, "XTITLE", title, 1)
-	out = strings.Replace(graph, "XCANVASID", strconv.Itoa(id), 1)
+	out := strings.Replace(graph, "XCANVASID", strconv.Itoa(id), 1)
 	out = strings.Replace(out, "XKEYS", string(keysj), 1)
 	out = strings.Replace(out, "XVALUES", string(valuesj), 1)
 
